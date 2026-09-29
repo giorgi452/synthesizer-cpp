@@ -13,6 +13,7 @@ find_package(PortAudio REQUIRED)
 set(SOURCES
     src/main.cpp
     src/synth.cpp
+    src/terminal.cpp
 )
 
 add_executable(synthesizer_cpp ${SOURCES})
