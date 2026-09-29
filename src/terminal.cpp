@@ -1,6 +1,7 @@
 #include "terminal.h"
 #include <cstdlib>
 #include <iostream>
+#include <sys/select.h>
 
 TerminalManager::TerminalManager() { enableRawMode(); }
 
@@ -31,4 +32,35 @@ void TerminalManager::enableRawMode() {
   }
 
   rawModeEnabled = true;
+}
+
+void TerminalManager::disableRawMode() {
+  if (!rawModeEnabled)
+    return;
+
+  // Restore original terminal attributes
+  tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
+  rawModeEnabled = false;
+}
+
+bool TerminalManager::kbhit() {
+  fd_set readfds;
+  FD_ZERO(&readfds);
+  FD_SET(STDIN_FILENO, &readfds);
+
+  struct timeval timeout;
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 0;
+
+  // Non-blocking select check on stdin with zero timeout
+  int result = select(STDIN_FILENO + 1, &readfds, NULL, NULL, &timeout);
+  return (result > 0 && FD_ISSET(STDIN_FILENO, &readfds));
+}
+
+char TerminalManager::getChar() {
+  char ch = 0;
+  if (read(STDIN_FILENO, &ch, 1) < 0) {
+    return 0;
+  }
+  return ch;
 }

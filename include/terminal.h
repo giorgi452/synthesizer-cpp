@@ -12,8 +12,8 @@ public:
   void enableRawMode();
   void disableRawMode();
 
-  void kbhit();
-  void getChar();
+  bool kbhit();
+  char getChar();
 
 private:
   struct termios orig_termios;
