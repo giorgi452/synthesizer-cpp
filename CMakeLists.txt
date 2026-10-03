@@ -14,6 +14,8 @@ set(SOURCES
     src/main.cpp
     src/synth.cpp
     src/terminal.cpp
+    src/oscillator.cpp
+    src/envelope.cpp
 )
 
 add_executable(synthesizer_cpp ${SOURCES})
