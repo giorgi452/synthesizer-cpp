@@ -44,4 +44,6 @@ float Oscillator::processNextSample(double frequency) {
     }
     break;
   }
+
+  return static_cast<float>(sampleValue);
 }
